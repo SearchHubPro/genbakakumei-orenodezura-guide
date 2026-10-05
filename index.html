@@ -49,6 +49,8 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 
 .cover .kicker { font-family: var(--font-display); font-weight: 700; letter-spacing: .12em; color: var(--muted); font-size: .85em; }
 .cover h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 900; }
 .cover p { margin: 0; max-width: 62ch; color: var(--muted); }
+.cover .tovideo { justify-self: start; text-decoration: none; background: var(--accent); color: var(--paper); font-weight: 700; padding: 10px 22px; border-radius: 999px; font-size: 1.05em; }
+.cover .tovideo:hover, .cover .tovideo:focus-visible { opacity: .85; outline: none; }
 
 /* 目次 */
 .toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
@@ -114,6 +116,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     <div class="kicker">現場革命 ／ 出面・経費の記帳アプリ</div>
     <h1>俺の出面 使い方ガイド</h1>
     <p>親方はパソコンかスマホで現場と子方を登録し、子方はスマホで毎日の出面と経費を送ります。集計と給料の計算はアプリが自動でやります。画面の<b style="color:var(--mark)">赤い枠と番号</b>が、操作する場所です。</p>
+    <a class="tovideo" href="#video">▶ 動画で見る</a>
   </header>
 
   <nav class="toc" aria-label="目次">
@@ -122,6 +125,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     <a href="#mobile">親方（スマホ）</a>
     <a href="#child">子方（スマホ）</a>
     <a href="#faq">こまったとき</a>
+    <a href="#video">動画で見る</a>
   </nav>
 
   <section id="flow">
@@ -494,6 +498,22 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     .vurl input { flex: 1; min-width: 0; font-size: 12px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
     .vurl button { flex: none; font-size: 13px; padding: 6px 10px; border: 0; border-radius: 6px; background: var(--accent); color: var(--paper); cursor: pointer; }
   </style>
+  <script>
+    // 「動画で見る」：途中の画像を先に読み込んでから、動画のところまで移動する
+    document.querySelectorAll('a[href="#video"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var t = document.getElementById('video');
+        if (!t) return;
+        e.preventDefault();
+        var imgs = Array.prototype.slice.call(document.querySelectorAll('img[loading="lazy"]'));
+        imgs.forEach(function (i) { i.loading = 'eager'; });
+        var go = function () { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+        Promise.all(imgs.map(function (i) { return i.decode ? i.decode().catch(function () {}) : null; })).then(go);
+        setTimeout(go, 1200);
+        if (history.replaceState) history.replaceState(null, '', '#video');
+      });
+    });
+  </script>
   <script>
     document.querySelectorAll('.vurl button').forEach(function (b) {
       b.addEventListener('click', function () {
