@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>俺の出面｜出面・経費・請求書をスマホで</title>
+<meta name="description" content="建設業の出面・経費の記帳アプリ「俺の出面」。子方はスマホで送るだけ、親方は自動で集計。請求書もワンクリック。最初の30日間無料、そのあと月1,000円（税別）。">
+<meta name="theme-color" content="#15120f">
+<meta property="og:title" content="俺の出面｜出面・経費・請求書をスマホで">
+<meta property="og:description" content="子方はスマホで送るだけ。親方は自動で集計。請求書もワンクリック。最初の30日間無料。">
+<meta property="og:image" content="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/lp/img/cover.webp">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap">
+<link rel="preload" as="image" href="img/cover.webp">
+<style>
+:root {
+  --bg: #15120f; --paper: #fffaf0; --ink: #1b1712; --muted: #6d655a;
+  --yel: #ffc400; --org: #f08a24; --red: #d7261e; --line: rgba(255,255,255,.18);
+  --disp: "Dela Gothic One", "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --vh: 100vh;
+}
+@supports (height: 100svh) { :root { --vh: 100svh; } }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #0b0907; color: #fff; font-family: var(--body); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ページ（1画面ずつ。下から上にスワイプで次へ） */
+.deck { height: var(--vh); overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch;
+  max-width: 520px; margin: 0 auto; scrollbar-width: none; position: relative; background: var(--bg); }
+.deck::-webkit-scrollbar { display: none; }
+.pg { position: relative; height: var(--vh); scroll-snap-align: start; scroll-snap-stop: always; overflow: hidden;
+  display: flex; flex-direction: column; padding: max(18px, env(safe-area-inset-top)) 20px max(22px, calc(env(safe-area-inset-bottom) + 14px)); }
+.bgimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.pg > *:not(.bgimg):not(.shade) { position: relative; z-index: 2; }
+.pg.has-mini { padding-bottom: max(70px, calc(env(safe-area-inset-bottom) + 64px)); }
+.shade { position: absolute; inset: 0; z-index: 1; }
+
+.kicker { font-weight: 700; font-size: 13px; letter-spacing: .14em; color: var(--yel); }
+h1, h2 { font-family: var(--disp); font-weight: 400; line-height: 1.22; letter-spacing: .02em; }
+h2 { font-size: clamp(27px, 8.2vw, 38px); margin-top: 6px; }
+h2 em { font-style: normal; color: var(--yel); }
+.lead { font-size: clamp(14.5px, 4.1vw, 16.5px); line-height: 1.75; margin-top: 10px; font-weight: 500; }
+.hl { background: linear-gradient(transparent 62%, rgba(255,196,0,.55) 62%); }
+
+/* 1. 表紙 */
+.p-cover .shade { background: linear-gradient(180deg, rgba(10,8,6,.86) 0%, rgba(10,8,6,.55) 30%, rgba(10,8,6,0) 52%, rgba(10,8,6,0) 74%, rgba(10,8,6,.8) 100%); }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand img { width: 44px; height: 44px; border-radius: 11px; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+.brand span { font-weight: 700; font-size: 12.5px; line-height: 1.4; color: #f3e7d3; }
+.p-cover h1 { font-size: clamp(54px, 17vw, 78px); margin-top: 14px; color: #fff; text-shadow: 0 3px 0 var(--red), 0 6px 18px rgba(0,0,0,.6); }
+.p-cover h1 small { display: block; font-family: var(--body); font-weight: 900; font-size: clamp(13px, 3.6vw, 15px); letter-spacing: .3em; color: var(--yel); text-shadow: none; margin-top: 2px; }
+.catch { margin-top: 12px; font-family: var(--disp); font-size: clamp(19px, 5.6vw, 24px); line-height: 1.45; text-shadow: 0 2px 10px rgba(0,0,0,.8); }
+.catch b { color: var(--yel); font-weight: 400; }
+.free-badge { position: absolute; z-index: 2; right: 16px; top: 30%; width: 104px; height: 104px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-content: center; text-align: center;
+  transform: rotate(-10deg); box-shadow: 0 6px 18px rgba(0,0,0,.45), inset 0 0 0 4px rgba(255,255,255,.85); font-weight: 900; line-height: 1.15; }
+.free-badge b { font-family: var(--disp); font-weight: 400; font-size: 25px; display: block; }
+.free-badge small { font-size: 11px; }
+.swipe { margin-top: auto; align-self: center; text-align: center; font-weight: 700; font-size: 13px; letter-spacing: .1em; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.8); }
+.swipe i { display: block; width: 26px; height: 26px; margin: 0 auto 4px; border-left: 4px solid var(--yel); border-top: 4px solid var(--yel); transform: rotate(45deg); animation: up 1.6s ease-in-out infinite; }
+@keyframes up { 0%, 100% { transform: translateY(6px) rotate(45deg); opacity: .5; } 50% { transform: translateY(-4px) rotate(45deg); opacity: 1; } }
+
+/* 絵を上に置くページ */
+.p-art { background: var(--bg); padding-top: 0; }
+.art { margin: 0 -20px; height: 42%; min-height: 0; position: relative; flex: none; }
+.art img { width: 100%; height: 100%; object-fit: cover; }
+.art::after { content: ""; position: absolute; inset: auto 0 0 0; height: 40%; background: linear-gradient(transparent, var(--bg)); }
+.art .tag { position: absolute; left: 16px; top: max(16px, env(safe-area-inset-top)); z-index: 2; background: var(--red); color: #fff; font-weight: 900; font-size: 12px; padding: 4px 10px; border-radius: 3px; letter-spacing: .1em; }
+
+/* 困りごと */
+.worry { list-style: none; margin-top: 14px; display: grid; gap: 9px; }
+.worry li { background: rgba(255,255,255,.07); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 10px 42px; position: relative; font-weight: 700; font-size: clamp(14px, 4vw, 16px); line-height: 1.5; }
+.worry li::before { content: "×"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: var(--red); display: grid; place-content: center; font-size: 14px; }
+
+/* 解決の3ステップ */
+.steps { display: grid; gap: 8px; margin-top: 14px; counter-reset: s; }
+.steps div { display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: center; background: var(--paper); color: var(--ink); border-radius: 12px; padding: 10px 12px; }
+.steps div::before { counter-increment: s; content: counter(s); width: 34px; height: 34px; border-radius: 50%; background: var(--yel); color: var(--ink); font-family: var(--disp); font-size: 18px; display: grid; place-content: center; }
+.steps b { display: block; font-size: clamp(15px, 4.3vw, 17px); font-weight: 900; }
+.steps span { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+
+/* 画面写真のページ（明るい） */
+.p-light { background: linear-gradient(180deg, #fff5df 0%, #ffe9b8 100%); color: var(--ink); }
+.p-light .kicker { color: var(--red); }
+.p-light h2 em { color: var(--red); }
+.phones { position: relative; flex: 1; min-height: 0; margin-top: 12px; display: flex; justify-content: center; align-items: flex-start; }
+.phone { height: 100%; aspect-ratio: 9 / 18.5; border-radius: 26px; background: #111; padding: 7px; box-shadow: 0 14px 30px rgba(60,35,0,.35); }
+.phone .scr { border-radius: 20px; overflow: hidden; background: #fff; height: 100%; }
+.phone .scr img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.phones.two .phone { position: absolute; height: 86%; max-height: calc((100vw - 40px) * .5 / .486); }
+.phones.two .phone:first-child { left: 3%; top: 0; transform: rotate(-3deg); }
+.phones.two .phone + .phone { right: 3%; top: 12%; transform: rotate(5deg); }
+.points { list-style: none; display: grid; gap: 6px; margin-top: 12px; }
+.points li { padding-left: 26px; position: relative; font-weight: 700; font-size: clamp(13.5px, 3.9vw, 15.5px); line-height: 1.5; }
+.points li::before { content: ""; position: absolute; left: 2px; top: .3em; width: 16px; height: 16px; border-radius: 4px; background: var(--red); }
+.points li::after { content: ""; position: absolute; left: 6px; top: calc(.3em + 3px); width: 5px; height: 8px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+.p-dark .points li::before { background: var(--yel); } .p-dark .points li::after { border-color: var(--ink); }
+
+/* 請求書 */
+.inv { position: relative; flex: 1; min-height: 0; margin-top: 10px; }
+.inv .paper { position: absolute; left: 0; top: 0; width: 66%; border-radius: 4px; box-shadow: 0 12px 28px rgba(60,35,0,.35); transform: rotate(-4deg); background: #fff; }
+.inv .paper.b { left: auto; right: 0; top: 10%; width: 52%; transform: rotate(5deg); }
+.inv .stamp { position: absolute; right: 4%; bottom: 6%; background: var(--red); color: #fff; font-family: var(--disp); font-size: clamp(18px, 5.4vw, 22px); padding: 8px 14px; border-radius: 6px; transform: rotate(-6deg); box-shadow: 0 6px 14px rgba(0,0,0,.25); line-height: 1.25; text-align: center; }
+.inv .stamp small { display: block; font-family: var(--body); font-weight: 900; font-size: 11px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chips span { background: var(--ink); color: #fff; font-weight: 700; font-size: 12.5px; padding: 5px 10px; border-radius: 999px; }
+.chips span.y { background: var(--red); }
+
+/* 1人親方（絵の上に文字） */
+.p-team .shade { background: linear-gradient(180deg, rgba(8,20,40,.78) 0%, rgba(8,20,40,.35) 34%, rgba(8,20,40,0) 50%, rgba(10,8,6,0) 64%, rgba(10,8,6,.92) 100%); }
+.p-team .bottom { margin-top: auto; }
+
+/* 料金 */
+.p-price { background: radial-gradient(120% 70% at 50% 0%, #3a2a12 0%, var(--bg) 60%); }
+.price { margin-top: 14px; background: var(--paper); color: var(--ink); border-radius: 16px; padding: 16px 16px 14px; position: relative; overflow: hidden; }
+.price .free { background: var(--red); color: #fff; border-radius: 10px; text-align: center; padding: 10px 8px 9px; }
+.price .free b { font-family: var(--disp); font-weight: 400; font-size: clamp(26px, 8vw, 34px); letter-spacing: .02em; }
+.price .free small { display: block; font-weight: 700; font-size: 12.5px; }
+.price .then { text-align: center; margin-top: 12px; font-weight: 700; font-size: 14px; color: var(--muted); }
+.price .yen { text-align: center; font-family: var(--disp); font-size: clamp(40px, 13vw, 54px); line-height: 1.1; }
+.price .yen small { font-family: var(--body); font-weight: 900; font-size: 15px; }
+.price .tax { text-align: center; font-size: 12px; color: var(--muted); font-weight: 700; }
+.price ul { list-style: none; margin-top: 12px; border-top: 1px dashed #d8cdb9; padding-top: 10px; display: grid; gap: 6px; }
+.price li { font-size: 13.5px; font-weight: 700; display: flex; justify-content: space-between; gap: 8px; }
+.price li span:last-child { color: var(--red); white-space: nowrap; }
+.note { font-size: 11.5px; color: rgba(255,255,255,.7); margin-top: 10px; line-height: 1.6; }
+
+/* 動画 */
+.p-video { background: #0d0b09; }
+.video { margin-top: 14px; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,.6); aspect-ratio: 16 / 9; }
+.video video { width: 100%; height: 100%; display: block; }
+.links { display: grid; gap: 8px; margin-top: 16px; }
+.links a { display: flex; align-items: center; justify-content: space-between; text-decoration: none; background: rgba(255,255,255,.08); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-weight: 700; font-size: 14.5px; }
+.links a::after { content: "›"; font-size: 22px; color: var(--yel); line-height: 1; }
+
+/* 3つの画面 */
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 16px; }
+.three div { background: var(--paper); color: var(--ink); border-radius: 10px; padding: 9px 7px; text-align: center; border-top: 4px solid var(--yel); }
+.three b { display: block; font-weight: 900; font-size: 13px; }
+.three span { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; font-weight: 500; }
+@media (max-height: 700px) { .three { margin-top: 10px; } .three span { display: none; } }
+
+/* 最後 */
+.p-last .shade { background: linear-gradient(180deg, rgba(10,8,6,.2) 0%, rgba(10,8,6,.55) 38%, rgba(10,8,6,.95) 62%); }
+.p-last .bottom { margin-top: auto; text-align: center; }
+.p-last h2 { font-size: clamp(30px, 9vw, 42px); }
+.contact { font-size: 12.5px; color: rgba(255,255,255,.8); margin-top: 12px; line-height: 1.7; }
+.contact a { color: var(--yel); }
+.foot { font-size: 10.5px; color: rgba(255,255,255,.5); margin-top: 8px; }
+
+/* 申し込みボタン */
+.cta { display: block; width: 100%; text-align: center; text-decoration: none; background: linear-gradient(180deg, #ffd23f 0%, var(--yel) 55%, #f0a800 100%); color: var(--ink);
+  font-family: var(--disp); font-size: clamp(19px, 5.6vw, 23px); padding: 15px 12px 14px; border-radius: 14px; box-shadow: 0 5px 0 #a86a00, 0 10px 22px rgba(0,0,0,.35); margin-top: 16px; letter-spacing: .03em; }
+.cta small { display: block; font-family: var(--body); font-weight: 900; font-size: 12px; margin-top: 2px; }
+.cta:active { transform: translateY(3px); box-shadow: 0 2px 0 #a86a00, 0 6px 14px rgba(0,0,0,.3); }
+
+/* いつも出る小さい申し込みボタン（表紙と最後と料金では隠す） */
+.mini { position: fixed; z-index: 20; left: 50%; bottom: max(12px, calc(env(safe-area-inset-bottom) + 6px)); transform: translate(-50%, 140%); transition: transform .3s;
+  text-decoration: none; background: var(--red); color: #fff; font-weight: 900; font-size: 14px; padding: 10px 20px; border-radius: 999px; box-shadow: 0 6px 18px rgba(0,0,0,.4); white-space: nowrap; border: 2px solid #fff; }
+.mini.on { transform: translate(-50%, 0); }
+
+/* 右の点（今のページ） */
+.dots { position: fixed; z-index: 15; top: 50%; transform: translateY(-50%); right: max(6px, calc(50% - 260px + 6px)); display: grid; gap: 7px; }
+.dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; background: rgba(255,255,255,.45); padding: 0; cursor: pointer; box-shadow: 0 0 0 1px rgba(0,0,0,.25); transition: height .2s, background .2s; }
+.dots button.on { background: var(--yel); height: 20px; border-radius: 4px; }
+.dots.dark button { background: rgba(0,0,0,.25); } .dots.dark button.on { background: var(--red); }
+
+/* 画面の高さが低いスマホ（SEなど） */
+@media (max-height: 700px) {
+  .art { height: 34%; }
+  .lead { font-size: 14px; line-height: 1.6; margin-top: 6px; }
+  .worry { gap: 6px; } .worry li { padding: 7px 10px 7px 40px; font-size: 13.5px; }
+  .steps div { padding: 7px 10px; } .steps span { display: none; }
+  .points li { font-size: 13px; } .price { padding: 12px; } .price ul { gap: 3px; } .free-badge { width: 88px; height: 88px; } .free-badge b { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { .swipe i { animation: none; } .deck { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<main class="deck" id="deck">
+
+  <!-- 1 表紙 -->
+  <section class="pg p-cover" aria-label="表紙">
+    <img class="bgimg" src="img/cover.webp" alt="" fetchpriority="high">
+    <div class="shade"></div>
+    <div class="brand"><img src="img/icon.webp" alt="俺の出面のアイコン"><span>建設業の<br>出面・経費・請求アプリ</span></div>
+    <h1>俺の出面<small>オレノデヅラ</small></h1>
+    <p class="catch">出面、まだ<b>紙とLINE</b>で<br>集めてる？</p>
+    <div class="free-badge"><small>最初の</small><b>30日</b><small>無料</small></div>
+    <div class="swipe"><i></i>上にスワイプ</div>
+  </section>
+
+  <!-- 2 困りごと -->
+  <section class="pg p-art" aria-label="こんな悩み" data-mini>
+    <div class="art"><img src="img/pv01.webp" alt="夜の事務所で頭を抱える親方" loading="lazy"><span class="tag">月末の夜</span></div>
+    <p class="kicker">こんな夜、ないですか？</p>
+    <h2>集計が、終わらん。<br><em>給料日</em>は<br>待ってくれん。</h2>
+    <ul class="worry">
+      <li>LINEで来た出面を、ノートに写す</li>
+      <li>人工と経費を、電卓でたたき直す</li>
+      <li>請求書がつい後回しで、遅れる</li>
+    </ul>
+  </section>
+
+  <!-- 3 解決 -->
+  <section class="pg p-art" aria-label="俺の出面でこう変わる" data-mini>
+    <div class="art"><img src="img/pv04.webp" alt="スマホを見てほほえむ親方" loading="lazy"><span class="tag">俺の出面なら</span></div>
+    <p class="kicker">スマホで送るだけ。あとは自動。</p>
+    <h2>出面から<br><em>給料・請求</em>まで<br>ひとつで。</h2>
+    <div class="steps">
+      <div><p><b>子方がスマホで送る</b><span>現場・人数・経費をその日のうちに</span></p></div>
+      <div><p><b>親方は自動で集計</b><span>締め日ごとの人工と支給額が出る</span></p></div>
+      <div><p><b>請求書もワンクリック</b><span>出面から、宛先の会社ごとに作れる</span></p></div>
+    </div>
+  </section>
+
+  <!-- 4 子方の画面 -->
+  <section class="pg p-light" aria-label="子方の画面" data-mini>
+    <p class="kicker">子方さんの画面</p>
+    <h2>現場を選んで<br><em>送るだけ</em>。</h2>
+    <div class="phones two">
+      <div class="phone"><div class="scr"><img src="img/sc_ko_report.webp" alt="子方モバイルの報告画面" loading="lazy"></div></div>
+      <div class="phone"><div class="scr"><img src="img/sc_ko_cal.webp" alt="子方モバイルの給料の見込みとカレンダー" loading="lazy"></div></div>
+    </div>
+    <ul class="points">
+      <li>現場・人数・経費をスマホから</li>
+      <li>自分の給料の見込みと出勤日もすぐ見られる</li>
+      <li>親方から届く招待コードで登録するだけ</li>
+    </ul>
+  </section>
+
+  <!-- 5 親方の画面 -->
+  <section class="pg p-light" aria-label="親方の画面" data-mini>
+    <p class="kicker">親方の画面</p>
+    <h2>人工も支給額も<br><em>勝手にそろう</em>。</h2>
+    <div class="phones">
+      <div class="phone"><div class="scr"><img src="img/sc_oya.webp" alt="親方モバイルの管理画面" loading="lazy"></div></div>
+    </div>
+    <ul class="points">
+      <li>締め日ごとに人工・日当・経費を自動で集計</li>
+      <li>パソコンでもスマホでも、同じデータ</li>
+      <li>CSVでExcelにも出せる</li>
+    </ul>
+  </section>
+
+  <!-- 6 請求書 -->
+  <section class="pg p-light" aria-label="請求書" data-mini>
+    <p class="kicker">いちばん面倒な、あれも</p>
+    <h2>請求書が<br><em>ワンクリック</em>。</h2>
+    <div class="inv">
+      <img class="paper" src="img/sc_inv_std.webp" alt="請求書の見本（標準・紺）" loading="lazy">
+      <img class="paper b" src="img/sc_inv_color.webp" alt="請求書の見本（カラー・オレンジ）" loading="lazy">
+      <div class="stamp">社印・ロゴも<small>デザイン3種×色6色</small></div>
+    </div>
+    <div class="chips"><span class="y">常用（人工×単価）</span><span class="y">出来高（請負×％）</span><span class="y">人工精算→最終精算</span><span>PDFでLINE・メール送信</span><span>Excelも</span></div>
+  </section>
+
+  <!-- 7 1人親方 -->
+  <section class="pg p-team" aria-label="1人親方でも" data-mini>
+    <img class="bgimg" src="img/team.webp" alt="" loading="lazy">
+    <div class="shade"></div>
+    <p class="kicker">従業員がいなくても</p>
+    <h2>1人親方でも。<br><em>応援</em>を呼んでも。</h2>
+    <div class="bottom">
+      <ul class="points" style="color:#fff">
+        <li>自分も応援の人も「子方」として登録</li>
+        <li>出面は親方がスマホでまとめて入力</li>
+        <li>応援の人に払う額も、元請けへの請求も自動</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8 料金 -->
+  <section class="pg p-price" aria-label="料金">
+    <p class="kicker">料金</p>
+    <h2>まずは<em>30日</em>、<br>タダで使ってみて。</h2>
+    <div class="price">
+      <div class="free"><b>最初の30日間 無料</b><small>無料のうちに解約すれば、お金はかかりません</small></div>
+      <p class="then">そのあとは</p>
+      <p class="yen">月1,000<small>円</small></p>
+      <p class="tax">税別（税込1,100円）</p>
+      <ul>
+        <li><span>子方の登録</span><span>10人まで</span></li>
+        <li><span>子方を増やす</span><span>10人ごとに月1,000円（税別）</span></li>
+        <li><span>請求書・集計・CSV</span><span>追加料金なし</span></li>
+        <li><span>解約</span><span>アプリのボタンからいつでも</span></li>
+      </ul>
+    </div>
+    <a class="cta" data-buy href="#">30日無料で始める<small>カード登録だけで、すぐ使えます</small></a>
+  </section>
+
+  <!-- 9 動画 -->
+  <section class="pg p-video" aria-label="動画" data-mini>
+    <p class="kicker">動画で見る</p>
+    <h2>30秒で、<br>だいたい分かる。</h2>
+    <div class="video"><video controls playsinline preload="none" poster="img/pv07.webp" src="../videos/0_cm.mp4"></video></div>
+    <div class="three">
+      <div><b>親方デスク</b><span>パソコンで集計・請求書</span></div>
+      <div><b>親方モバイル</b><span>現場からスマホで入力・請求</span></div>
+      <div><b>子方モバイル</b><span>子方さんが出面を送る</span></div>
+    </div>
+    <div class="links">
+      <a href="../#flow" target="_blank" rel="noopener">使い方ガイドを見る</a>
+      <a href="../#video" target="_blank" rel="noopener">使い方の動画（親方・子方・1人親方）</a>
+    </div>
+  </section>
+
+  <!-- 10 申し込み -->
+  <section class="pg p-last" aria-label="申し込み">
+    <img class="bgimg" src="img/pv08.webp" alt="" loading="lazy" style="object-position: 70% 50%">
+    <div class="shade"></div>
+    <div class="bottom">
+      <p class="kicker">集計は、アプリにまかせて</p>
+      <h2>今日は、<br><em>早く帰ろう</em>。</h2>
+      <a class="cta" data-buy href="#">30日無料で始める<small>そのあと月1,000円（税別）・いつでも解約OK</small></a>
+      <p class="contact">申し込むと、ライセンスキー・PIN・画面のURL・使い方ガイドがメールで届きます。<br>お問い合わせ：<a href="mailto:genbakakumei11@gmail.com">genbakakumei11@gmail.com</a></p>
+      <p class="foot">現場革命　俺の出面</p>
+    </div>
+  </section>
+</main>
+
+<nav class="dots" id="dots" aria-label="ページ"></nav>
+<a class="mini" id="mini" data-buy href="#">30日無料で始める</a>
+
+<script>
+  // 申し込みボタン：材料屋の印（?p=印）があれば、購入リンクにそのまま渡す
+  (function () {
+    var BUY = 'https://buy.stripe.com/dRmeVc9ka0ADbjm1WZ4AU0a';
+    var p = new URLSearchParams(location.search).get('p') || '';
+    var url = /^[A-Za-z0-9_-]{1,40}$/.test(p) ? BUY + '?client_reference_id=' + encodeURIComponent(p) : BUY;
+    document.querySelectorAll('[data-buy]').forEach(function (a) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; });
+  })();
+
+  // ページ送り：右の点・「次へ」・キーボード、今のページに合わせて点と小さいボタンを切り替える
+  (function () {
+    var deck = document.getElementById('deck'), pages = [].slice.call(deck.querySelectorAll('.pg')), dots = document.getElementById('dots'), mini = document.getElementById('mini');
+    var LIGHT = pages.map(function (p) { return p.classList.contains('p-light'); });
+    
+    pages.forEach(function (p, i) {
+      if (p.hasAttribute('data-mini')) p.classList.add('has-mini');
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', (i + 1) + 'ページ目');
+      b.addEventListener('click', function () { go(i); }); dots.appendChild(b);
+    });
+    function go(i) { i = Math.max(0, Math.min(pages.length - 1, i)); deck.scrollTo({ top: pages[i].offsetTop, behavior: 'smooth' }); }
+    function cur() { return Math.round(deck.scrollTop / deck.clientHeight); }
+    function mark() {
+      var i = cur();
+      [].forEach.call(dots.children, function (b, k) { b.classList.toggle('on', k === i); });
+      dots.classList.toggle('dark', !!LIGHT[i]);
+      mini.classList.toggle('on', pages[i].hasAttribute('data-mini'));
+    }
+    var t; deck.addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(mark, 60); }, { passive: true });
+    window.addEventListener('resize', mark);
+    document.querySelectorAll('[data-next]').forEach(function (b) { b.addEventListener('click', function () { go(cur() + 1); }); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur() + 1); }
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(cur() - 1); }
+    });
+    // 動画は、そのページを離れたら止める
+    var v = deck.querySelector('video');
+    deck.addEventListener('scroll', function () { if (v && !v.paused && cur() !== pages.indexOf(v.closest('.pg'))) v.pause(); }, { passive: true });
+    mark();
+  })();
+</script>
+</body>
+</html>
