@@ -656,7 +656,12 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
       if (history.replaceState) history.replaceState(null, '', '#' + id);
     });
     // アプリの「ガイドで見る」から #invoice などの付いたURLで開いた時も、その場所に合わせる
-    if (location.hash.length > 1) window.addEventListener('load', function () { goTo(decodeURIComponent(location.hash.slice(1)), false); });
+    if (location.hash.length > 1) {
+      var goHash = function () { goTo(decodeURIComponent(location.hash.slice(1)), false); };
+      window.addEventListener('load', goHash);
+      // 裏のタブで開かれた時は、表に出た時にもう一度合わせる
+      if (document.visibilityState === 'hidden') document.addEventListener('visibilitychange', function f() { if (document.visibilityState === 'visible') { document.removeEventListener('visibilitychange', f); goHash(); } });
+    }
   </script>
   <script>
     document.querySelectorAll('.vurl button').forEach(function (b) {
