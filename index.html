@@ -63,7 +63,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 
 .news-wait { color: var(--muted); }
 .toc a.tn { background: var(--accent); color: var(--paper); }
 .step[id] { scroll-margin-top: 64px; }
-.plan a, .faq a { color: var(--accent); font-weight: 700; }
+.plan a, .faq a, .tip a { color: var(--accent); font-weight: 700; }
 
 /* 目次 */
 .toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
@@ -170,7 +170,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
       <li><b>集計</b>には、応援の人に払う額（日当×人工＋経費）が人ごとに出ます。支払いの確認にそのまま使えます。</li>
       <li><b>請求書</b>には、自分と応援の人の人工がまとめて入ります。元請けへの請求をそのまま作れます（<a href="#invoice">請求書</a>）。</li>
     </ul>
-    <p class="tip">子方の人数（基本は10人まで）には、自分と応援の人も入ります。</p>
+    <p class="tip">子方の人数（基本は10人まで）には、自分と応援の人も入ります。<a href="#video">動画（1人親方編）</a>でも見られます。</p>
   </section>
 
   <section id="pc">
@@ -640,6 +640,20 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
         <video controls preload="none" playsinline src="videos/3_kokata_sp.mp4"></video>
         <div class="vurl"><input readonly value="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/3_kokata_sp.mp4" aria-label="子方・スマホ編のURL"><button type="button" data-url="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/3_kokata_sp.mp4">URLをコピー</button></div>
       </div>
+      <div class="vcard">
+        <h3>1人親方編 <span class="vlen">3分05秒</span></h3>
+        <p class="lead">自分と応援の人の出面をまとめて入れる使い方。下の目次を押すと、そこから再生します</p>
+        <video controls preload="none" playsinline src="videos/4_hitori_oyakata.mp4" data-chap="videos/4_hitori_oyakata_chapters.json"></video>
+        <ol class="vchap"></ol>
+        <div class="vurl"><input readonly value="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/4_hitori_oyakata.mp4" aria-label="1人親方編のURL"><button type="button" data-url="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/4_hitori_oyakata.mp4">URLをコピー</button></div>
+      </div>
+      <div class="vcard" id="video-update">
+        <h3>アップデート編 <span class="vlen">6分37秒</span></h3>
+        <p class="lead">新しくできたことの説明。アップデートのたびに後ろに足していきます。下の目次を押すと、そこから再生します</p>
+        <video controls preload="none" playsinline src="videos/5_update.mp4" data-chap="videos/5_update_chapters.json"></video>
+        <ol class="vchap"></ol>
+        <div class="vurl"><input readonly value="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/5_update.mp4" aria-label="アップデート編のURL"><button type="button" data-url="https://searchhubpro.github.io/genbakakumei-orenodezura-guide/videos/5_update.mp4">URLをコピー</button></div>
+      </div>
     </div>
   </section>
 
@@ -652,6 +666,12 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
     .vcard video { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; margin-top: 10px; display: block; }
     .vurl { display: flex; gap: 8px; margin-top: 10px; }
     .vurl input { flex: 1; min-width: 0; font-size: 12px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+    .vchap { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+    .vchap button { width: 100%; text-align: left; display: flex; gap: 10px; align-items: baseline; font: inherit; font-size: .9em; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); cursor: pointer; }
+    .vchap button:hover, .vchap button:focus-visible { border-color: var(--accent); outline: none; }
+    .vchap li.sub { padding-left: 18px; }
+    .vchap li.sub button { font-size: .85em; padding: 6px 10px; }
+    .vchap .tm { flex: none; font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 700; }
     .vurl button { flex: none; font-size: 13px; padding: 6px 10px; border: 0; border-radius: 6px; background: var(--accent); color: var(--paper); cursor: pointer; }
   </style>
   <script>
@@ -681,6 +701,31 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
       // 裏のタブで開かれた時は、表に出た時にもう一度合わせる
       if (document.visibilityState === 'hidden') document.addEventListener('visibilitychange', function f() { if (document.visibilityState === 'visible') { document.removeEventListener('visibilitychange', f); goHash(); } });
     }
+  </script>
+  <script>
+    // 動画の目次：videos/○○_chapters.json（章と、章の中の項目）から作り、押すとその秒から再生する
+    document.querySelectorAll('video[data-chap]').forEach(function (v) {
+      var card = v.closest('.vcard'), ol = card.querySelector('.vchap'), len = card.querySelector('.vlen');
+      function mmss(t) { t = Math.floor(t); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
+      function jump(t) {
+        var go = function () { try { v.currentTime = t; } catch (e) {} var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); };
+        if (v.readyState >= 1) go(); else { v.preload = 'metadata'; v.addEventListener('loadedmetadata', go, { once: true }); v.load(); }
+      }
+      function item(c, sub) {
+        var li = document.createElement('li'), b = document.createElement('button'), tm = document.createElement('span'), tx = document.createElement('span');
+        b.type = 'button'; tm.className = 'tm'; tm.textContent = mmss(c.t); tx.textContent = c.title;
+        if (sub) li.className = 'sub';
+        b.appendChild(tm); b.appendChild(tx); b.addEventListener('click', function () { jump(c.t); });
+        li.appendChild(b); return li;
+      }
+      fetch(v.getAttribute('data-chap') + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+        if (j.duration && len) len.textContent = Math.floor(j.duration / 60) + '分' + String(Math.round(j.duration % 60)).padStart(2, '0') + '秒';
+        (j.chapters || []).forEach(function (c) {
+          ol.appendChild(item(c, false));
+          (c.subs || []).forEach(function (sc) { ol.appendChild(item(sc, true)); });
+        });
+      }).catch(function () {});
+    });
   </script>
   <script>
     document.querySelectorAll('.vurl button').forEach(function (b) {
