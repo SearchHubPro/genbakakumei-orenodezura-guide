@@ -63,6 +63,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 
 .news-wait { color: var(--muted); }
 .toc a.tn { background: var(--accent); color: var(--paper); }
 .step[id] { scroll-margin-top: 64px; }
+.plan a, .faq a { color: var(--accent); font-weight: 700; }
 
 /* 目次 */
 .toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
@@ -135,6 +136,7 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
   <nav class="toc" aria-label="目次">
     <a href="#news" class="tn">🔔 更新情報</a>
     <a href="#flow">全体の流れ</a>
+    <a href="#solo">1人親方の使い方</a>
     <a href="#pc">親方（パソコン）</a>
     <a href="#mobile">親方（スマホ）</a>
     <a href="#child">子方（スマホ）</a>
@@ -156,6 +158,19 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
       <li><b>親方が集計</b><span>締め日ごとの人工と支給額を確認・CSV出力</span></li>
     </ol>
     <div class="note"><b>3つの画面があります。</b>「親方デスク（パソコン用）」「親方モバイル（スマホ用）」「子方モバイル」です。URLは購入時のメールに書いてあります。親方はデスクとモバイルのどちらを使っても、同じデータが見られます。</div>
+  </section>
+
+  <section id="solo">
+    <h2>1人親方・少人数での使い方 <span class="who">親方</span></h2>
+    <p class="lead">従業員がいなくても使えます。自分と、応援で来てもらう人を「子方」として登録し、出面は親方が親方モバイルからまとめて入れます。</p>
+    <ul class="plan">
+      <li><b>自分も子方として登録します</b>。日当には自分の取り分の目安（例：1人工 18,000円・税別）を入れておくと、集計で自分の分も他の人と同じように見られます。招待コードは送らなくて大丈夫です。</li>
+      <li><b>応援で来てもらう人も子方として登録します</b>。従業員でなくてもかまいません。日当には、その人に払う1人工の金額を入れます。応援の人は子方モバイルを使わなくて大丈夫です（招待コードも送らなくていい）。</li>
+      <li><b>出面は親方モバイルの「入力」</b>から、自分の分も応援の人の分も親方が入れます（<a href="#mobile-input">入れ方</a>）。</li>
+      <li><b>集計</b>には、応援の人に払う額（日当×人工＋経費）が人ごとに出ます。支払いの確認にそのまま使えます。</li>
+      <li><b>請求書</b>には、自分と応援の人の人工がまとめて入ります。元請けへの請求をそのまま作れます（<a href="#invoice">請求書</a>）。</li>
+    </ul>
+    <p class="tip">子方の人数（基本は10人まで）には、自分と応援の人も入ります。</p>
   </section>
 
   <section id="pc">
@@ -550,6 +565,10 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
   <section id="faq">
     <h2>こまったとき</h2>
     <div class="faq">
+      <details>
+        <summary>1人親方でも使える？</summary>
+        <p>使えます。自分と応援の人を子方として登録し、出面は親方モバイルの「入力」で親方がまとめて入れてください。くわしくは「<a href="#solo">1人親方・少人数での使い方</a>」を見てください。</p>
+      </details>
       <details>
         <summary>スマホのホーム画面にアイコンを置きたい</summary>
         <p>iPhone（Safari）は、下の共有ボタン → 「ホーム画面に追加」。Android（Chrome）は、右上の︙ → 「ホーム画面に追加」です。次からはアイコンを押すだけで開けます。先にブラウザでキーやPIN（子方は招待コード）を入れていた場合は、アイコンから開いてもう一度入れてください。</p>
